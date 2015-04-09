@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Parse JSON, Extract Wiki Text, Convert to HTML</title>
+<script src="jquery-1.11.2.min.js"></script>
+<script>
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
+</script>
+<style>
+pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+</style>
+
+<body>
+
+<h1>Data Check</h1>
+
+<p id="jsonText"></p>
+<p id="results">
+
+<script>
+var jsonData = "";
+$.get('data.json', function(data) {
+	jsonData = data;
+	alert(data);
+	alert(jsonData);
+});
+//document.getElementById("jsonText").innerHTML = "<pre>" + jsonData + "</pre>";
+document.write("<pre>" + JSON.stringify(jsonData, null, 4) + "</pre>");
+</script>
+</p>
+</body>
+</html>

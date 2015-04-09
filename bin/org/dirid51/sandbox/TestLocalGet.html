@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta charset="utf-8">
+<title>Test Local Get</title>
+<script src="jquery-1.11.2.min.js"></script>
+<script src="lang-codes.js"></script>
+<script>
+
+function getLanguageName(langCode) {
+	if (langCode != null && langCode.length > 1 && langCode.length < 4) {
+		var lcObj = getLangCodesObj();
+		return lcObj[langCode];
+	}
+	
+}
+
+/********************************************************************************************************
+*
+@author: remy sharp / http://remysharp.com
+*	  @url: http://remysharp.com/2008/04/01/wiki-to-html-using-javascript/
+*	  @license: Creative Commons License - ShareAlike http://creativecommons.org/licenses/by-sa/3.0/
+*	  @version: 1.0
+*
+* Code below pulled from URL listed above. Modified by Randall Booth
+*
+*********************************************************************************************************/
+
+function wiki2html(s) {
+    
+    // lists need to be done using a function to allow for recusive calls
+    function list(str) {
+        return str.replace(/(?:(?:(?:^|\n)[\*#].*)+)/g, function (m) {  // (?=[\*#])
+            var type = m.match(/(^|\n)#/) ? 'OL' : 'UL';
+            // strip first layer of list
+            m = m.replace(/(^|\n)[\*#][ ]{0,1}/g, "$1");
+            m = list(m);
+            return '<' + type + '><li>' + m.replace(/^\n/, '').split(/\n/).join('</li><li>') + '</li></' + type + '>';
+        });
+    }
+    
+    return list(s
+        
+        /* BLOCK ELEMENTS */
+        .replace(/(?:^|\n+)([^# =\*<].+)(?:\n+|$)/gm, function (m, l) {
+            if (l.match(/^\^+$/)) return l;
+            return "\n<p>" + l + "</p>\n";
+        })
+
+        .replace(/(?:^|\n)[ ]{2}(.*)+/g, function (m, l) { // blockquotes
+            if (l.match(/^\s+$/)) return m;
+            return '<blockquote>' + l + '</blockquote>';
+        })
+        
+        .replace(/((?:^|\n)[ ]+.*)+/g, function (m) { // code
+            if (m.match(/^\s+$/)) return m;
+            return '<pre>' + m.replace(/(^|\n)[ ]+/g, "$1") + '</pre>';
+        })
+
+        .replace(/(?:^|\n)([=]+)(.*)\1/g, function (m, l, t) { // headings
+            return '<h' + l.length + '>' + t + '</h' + l.length + '>';
+        })
+    
+        /* INLINE ELEMENTS */
+        .replace(/<ref(?:(?!<\/ref>).)*<\/ref>/g, function(m, l) {
+        	return "";
+        })
+        
+        .replace(/'''(.*?)'''/g, function (m, l) { // bold
+            return '<strong>' + l + '</strong>';
+        })
+    
+        .replace(/''(.*?)''/g, function (m, l) { // italic
+            return '<em>' + l + '</em>';
+        })
+    
+        .replace(/[^\[](http[^\[\s]*)/g, function (m, l) { // normal link
+            return '<a href="' + l + '">' + l + '</a>';
+        })
+    
+        .replace(/[\[](http.*)[!\]]/g, function (m, l) { // external link
+            var p = l.replace(/[\[\]]/g, '').split(/ /);
+            var link = p.shift();
+            return '<a href="http://en.wikipedia.org/wiki/' + link + '">' + (p.length ? p.join(' ') : link) + '</a>';
+        })
+    
+        .replace(/\[\[(.*?)\]\]/g, function (m, l) { // internal link or image
+            var p = l.split(/\|/);
+            var link = p.shift();
+
+            if (link.match(/^Image:(.*)/)) {
+                // no support for images - since it looks up the source from the wiki db :-(
+                return ""; //Modified - don't worry about images
+            } else if (link.match(/^File:(.*)/)) {
+            	return ""; //Modified - Don't show file links
+        	} else {
+                return '<a href="http://en.wikipedia.org/wiki/' + link + '">' + (p.length ? p.join('|') : link) + '</a>';
+            }
+        })
+        
+        .replace(/\{\{lang-([a-z]+)\|([^\}]+)\}\}/g, function(m, l, n) { //Alternate names in different languages
+        	return getLanguageName(l) + ": " + n;
+        })
+    ); 
+}
+</script>
+<body>
+<p>Results should be below.</p>
+<p id="test">
+</p>
+<script type="text/javascript">
+$.get("data.json", function(data) {
+	var wikiText = data.query.pages["180394"].revisions["0"]["*"];
+	var htmlFromWiki = wiki2html(wikiText);
+	$("p#test").html(htmlFromWiki);
+}, null, "json");
+</script>
+</body>
+</html>

@@ -8,6 +8,32 @@ import java.util.regex.Pattern;
 public class RegexTesting {
 
 	public static void main(String[] args) {
+//		RegexTesting.testEFNFU();
+		RegexTesting.extractSiteNumFromUrl("http://whc.unesco.org/en/list/741");
+	}
+	
+	public static void extractSiteNumFromUrl(String url) {
+		Matcher m = Pattern.compile("^http://whc\\.unesco\\.org/en/list/(\\d+)$").matcher(url);
+		if (m.matches()) System.out.println(m.group(1));
+	}
+	
+	public static void extractFileNameFromUrl(String url) {
+//		^http://onebigphoto\.com/uploads/\d+/\d+/(.+\.jpg)$
+		Pattern p = Pattern.compile("^http://onebigphoto\\.com/uploads/\\d+/\\d+/(.+\\.jpg)$");
+		Matcher m = p.matcher(url);
+//		If you don't run the matches() method, you cannot get results back from the group() method!
+		if (m.matches()) {
+	        System.out.println("Match found: " + m.group(1));
+        }
+	}
+	
+	public static void extractFileNamesFromUrls(List<String> urls) {
+		urls
+			.stream()
+			.forEach(s -> extractFileNameFromUrl(s));
+	}
+	
+	public static void testEFNFU() {
 		RegexTesting.extractFileNameFromUrl("http://onebigphoto.com/uploads/2011/11/jökulsárlón-lake-iceland.jpg");
 		String[] urlArray = {"http://onebigphoto.com/uploads/2015/03/winter-wonderland-in-shirakawa-village-japan.jpg",
 						"http://onebigphoto.com/uploads/2015/03/under-matterhorn-valais-alps-switzerland.jpg",
@@ -985,21 +1011,6 @@ public class RegexTesting {
 						"http://onebigphoto.com/uploads/2011/10/yellow-fields.jpg",
 						"http://onebigphoto.com/uploads/2011/10/perfect-winter.jpg"};
 		RegexTesting.extractFileNamesFromUrls(Arrays.asList(urlArray));
-	}
-	
-	public static void extractFileNameFromUrl(String url) {
-//		^http://onebigphoto\.com/uploads/\d+/\d+/(.+\.jpg)$
-		Pattern p = Pattern.compile("^http://onebigphoto\\.com/uploads/\\d+/\\d+/(.+\\.jpg)$");
-		Matcher m = p.matcher(url);
-		if (m.matches()) {
-	        System.out.println("Match found: " + m.group(1));
-        }
-	}
-	
-	public static void extractFileNamesFromUrls(List<String> urls) {
-		urls
-			.stream()
-			.forEach(s -> extractFileNameFromUrl(s));
 	}
 
 }
