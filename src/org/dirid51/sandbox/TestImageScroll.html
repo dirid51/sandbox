@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta charset="utf-8">
+<title>Image Scroll Test</title>
+<style>
+body {
+	background: url('gray_sand.png');
+	z-index: 0;
+}
+
+section#main {
+	width: 400px;
+	margin: 0 auto;
+	background-color: lightslategray;
+}
+
+section#images {
+	padding: 0;
+	/*width: 400px;*/
+	/*overflow-x: hidden;
+	overflow-y: visible;*/
+	overflow: hidden;
+	white-space: nowrap;
+	z-index: -1;
+}
+
+section#images img {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	height: 250px;
+	width: 400px;
+	z-index: -2;
+	
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+section#images img:hover {
+	-webkit-transform: scale(2);
+    -moz-transform: scale(2);
+    -o-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
+    cursor: pointer;
+	z-index: 999;
+ 
+    -webkit-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+}
+
+div#imageContainer {
+	-webkit-animation: bannermove 30s linear infinite;
+       -moz-animation: bannermove 30s linear infinite;
+        -ms-animation: bannermove 30s linear infinite;
+         -o-animation: bannermove 30s linear infinite;
+            animation: bannermove 30s linear infinite;
+    
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+}
+
+div#imageContainer:hover {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+}
+
+@keyframes "bannermove" {
+ 0% {
+    margin-left: 0;
+ }
+ 100% {
+    margin-left: -3600px;
+ }
+}
+ 
+@-moz-keyframes bannermove {
+ 0% {
+    margin-left: 0;
+ }
+ 100% {
+    margin-left: -3600px;
+ }
+}
+ 
+@-webkit-keyframes "bannermove" {
+ 0% {
+    margin-left: 0;
+ }
+ 100% {
+    margin-left: -3600px;
+ }
+}
+ 
+@-ms-keyframes "bannermove" {
+ 0% {
+    margin-left: 0;
+ }
+ 100% {
+    margin-left: -3600px;
+ }
+}
+ 
+@-o-keyframes "bannermove" {
+ 0% {
+    margin-left: 0;
+ }
+ 100% {
+    margin-left: -3400px;
+ }
+}
+</style>
+<body>
+<section id="main">
+<header><h1>CSS Image Scroll Tester</h1></header>
+<p>The images should be scrolling or scrollable just below this bit of text.</p>
+<section id="images">
+<div id="imageContainer">
+<img src="file:///Y:\workspace\Sandbox\src\1_iceland.jpg" alt="Iceland 1" />
+<img src="file:///Y:\workspace\Sandbox\src\2_iceland.jpg" alt="Iceland 2" />
+<img src="file:///Y:\workspace\Sandbox\src\3_iceland.jpg" alt="Iceland 3" />
+<img src="file:///Y:\workspace\Sandbox\src\4_iceland.jpg" alt="Iceland 4" />
+<img src="file:///Y:\workspace\Sandbox\src\5_iceland.jpg" alt="Iceland 5" />
+<img src="file:///Y:\workspace\Sandbox\src\6_iceland.jpg" alt="Iceland 6" />
+<img src="file:///Y:\workspace\Sandbox\src\7_iceland.jpg" alt="Iceland 7" />
+<img src="file:///Y:\workspace\Sandbox\src\8_iceland.jpg" alt="Iceland 8" />
+<img src="file:///Y:\workspace\Sandbox\src\9_iceland.jpg" alt="Iceland 9" />
+<img src="file:///Y:\workspace\Sandbox\src\1_iceland.jpg" alt="Iceland 1" />
+</div></section>
+<p>This is test text to fill in a space to see what happens to text that may be located below the scrolling image bar which should be somewhere near the top part of the page and is the whole point for creating this page in the first place.</p>
+</section>
+</body>
+</html>
